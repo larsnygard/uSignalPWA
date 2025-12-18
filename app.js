@@ -31,8 +31,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     console.log('Cache deleted:', cacheName);
                 }
                 
-                // Register new service worker
-                const registration = await navigator.serviceWorker.register('/sw.js');
+                // Register new service worker - use relative path for GitHub Pages
+                const registration = await navigator.serviceWorker.register('./sw.js', { scope: './' });
                 console.log('Service Worker registered (no cache):', registration.scope);
                 updateStatus('Service Worker active (no cache)', 'success');
                 

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <base href=".">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="An unofficial Signal PWA client that runs locally in any browser">
+    <meta name="theme-color" content="#2090EA">
+    <title>uSignal - Unofficial Signal PWA</title>
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="./assets/manifest-Bbe0OSBb.json">
+    
+    <!-- Apple Touch Icons -->
+    <link rel="apple-touch-icon" href="./assets/icon-192x192-JfHGWH1W.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="uSignal">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="32x32" href="./assets/icon-192x192-JfHGWH1W.png">
+    
+    <!-- Stylesheet -->
+  <script type="module" crossorigin src="./assets/main-B6EtMxXL.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/main-BGj9Gmuz.css">
+</head>
+<body>
+    <div id="app">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-left">
+                <button class="menu-button" id="menuButton" aria-label="Menu">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M3 12h18M3 6h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </button>
+                <h1 class="app-title">uSignal</h1>
+            </div>
+            <div class="header-right">
+                <button class="icon-button" id="searchButton" aria-label="Search">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/>
+                        <path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </button>
+                <button class="icon-button" id="moreButton" aria-label="More options">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <circle cx="12" cy="12" r="2" fill="currentColor"/>
+                        <circle cx="12" cy="5" r="2" fill="currentColor"/>
+                        <circle cx="12" cy="19" r="2" fill="currentColor"/>
+                    </svg>
+                </button>
+            </div>
+        </header>
+
+        <div class="main-container">
+            <!-- Sidebar for conversation list -->
+            <aside class="sidebar" id="sidebar">
+                <div class="login-container" id="loginContainer">
+                    <h2>Connect to Signal</h2>
+                    <p>Enter your phone number to begin.</p>
+                    <form id="loginForm">
+                        <input type="tel" id="phoneNumber" placeholder="Phone number with country code" required>
+                        <button type="submit">Connect</button>
+                    </form>
+                    <div id="qrCodeContainer" style="display: none;">
+                        <p>Scan this QR code with your Signal app to link uSignal.</p>
+                        <div id="qrCode"></div>
+                    </div>
+                    <p class="disclaimer">This is a demonstration PWA. Use the official Signal app for a secure messaging experience.</p>
+                </div>
+            </aside>
+
+            <!-- Main chat area -->
+            <main class="chat-area" id="chatArea">
+                <div class="chat-placeholder">
+                    <div class="placeholder-icon">
+                        <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
+                            <circle cx="40" cy="40" r="38" stroke="currentColor" stroke-width="4" opacity="0.2"/>
+                            <path d="M25 40c0-8.284 6.716-15 15-15 8.284 0 15 6.716 15 15" stroke="currentColor" stroke-width="4" stroke-linecap="round" opacity="0.2"/>
+                            <circle cx="40" cy="50" r="3" fill="currentColor" opacity="0.2"/>
+                        </svg>
+                    </div>
+                    <h2>Select a conversation</h2>
+                    <p>Choose a conversation from the list to start messaging</p>
+                </div>
+            </main>
+        </div>
+
+        <!-- Install prompt -->
+        <div class="install-prompt" id="installPrompt" style="display: none;">
+            <div class="install-content">
+                <p>Install uSignal PWA for a better experience!</p>
+                <button class="install-button" id="installButton">Install</button>
+                <button class="dismiss-button" id="dismissButton">Not now</button>
+            </div>
+        </div>
+
+        <!-- Status bar -->
+        <div class="status-bar" id="statusBar">
+            <span class="status-indicator"></span>
+            <span class="status-text">Ready</span>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+</body>
+</html>
