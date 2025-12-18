@@ -1,3 +1,9 @@
+// Import libraries
+import QRCode from 'qrcodejs2';
+// Note: @signalapp/libsignal-client requires WASM and is Node.js focused
+// For a browser PWA, you may need to use a different approach or polyfills
+// import * as libsignal from '@signalapp/libsignal-client';
+
 document.addEventListener('DOMContentLoaded', () => {
     // App initialization
     let deferredPrompt;

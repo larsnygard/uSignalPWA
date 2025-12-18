@@ -1,0 +1,31 @@
+{
+  "name": "usignalpwa",
+  "version": "1.0.0",
+  "description": "An unofficial Signal Progressive Web App (PWA) client that runs locally in any browser supporting PWAs.",
+  "main": "app.js",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/larsnygard/uSignalPWA.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/larsnygard/uSignalPWA/issues"
+  },
+  "homepage": "https://github.com/larsnygard/uSignalPWA#readme",
+  "dependencies": {
+    "@signalapp/libsignal-client": "^0.86.9",
+    "qrcodejs2": "^0.0.2"
+  },
+  "devDependencies": {
+    "vite": "^7.3.0"
+  }
+}

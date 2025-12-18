@@ -38,17 +38,24 @@ If this app is hosted on GitHub Pages or any web server:
    cd uSignalPWA
    ```
 
-2. Serve the files using a local web server with HTTPS:
-   
-   **Using Python 3:**
+2. Install dependencies:
    ```bash
-   python3 -m http.server 8000
+   npm install
+   ```
+
+3. Start the development server:
+   ```bash
+   npm run dev
    ```
    
-   **Using Node.js (with http-server):**
+   The app will open automatically at `http://localhost:3000`
+
+4. Build for production:
    ```bash
-   npx http-server -p 8000
+   npm run build
    ```
+   
+   The production files will be in the `dist/` folder.
    
    **Using PHP:**
    ```bash
