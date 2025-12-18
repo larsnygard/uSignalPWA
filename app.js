@@ -132,7 +132,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             try {
                 updateStatus('Generating keys...', 'info');
-                const { libsignal } = window;
+const { libsignal } = window.SignalProtocol;
                 if (!libsignal) {
                     throw new Error('Signal protocol library not loaded.');
                 }
