@@ -3,6 +3,10 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
+# PWA specific
+.DS_Store
+Thumbs.db
+
 # User-specific files
 *.rsuser
 *.suo
