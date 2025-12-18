@@ -13,18 +13,43 @@ document.addEventListener('DOMContentLoaded', () => {
     const statusBar = document.getElementById('statusBar');
     const statusText = statusBar.querySelector('.status-text');
 
-    // Service Worker registration
+    // Service Worker registration - force update to clear cache
     if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-            navigator.serviceWorker.register('sw.js')
-                .then(registration => {
-                    console.log('Service Worker registered successfully:', registration.scope);
-                    updateStatus('Service Worker active', 'success');
-                })
-                .catch(error => {
-                    console.error('Service Worker registration failed:', error);
-                    updateStatus('Service Worker failed', 'error');
+        window.addEventListener('load', async () => {
+            try {
+                // Unregister all existing service workers first
+                const registrations = await navigator.serviceWorker.getRegistrations();
+                for (const registration of registrations) {
+                    await registration.unregister();
+                    console.log('Service Worker unregistered:', registration.scope);
+                }
+                
+                // Clear all caches
+                const cacheNames = await caches.keys();
+                for (const cacheName of cacheNames) {
+                    await caches.delete(cacheName);
+                    console.log('Cache deleted:', cacheName);
+                }
+                
+                // Register new service worker
+                const registration = await navigator.serviceWorker.register('/sw.js');
+                console.log('Service Worker registered (no cache):', registration.scope);
+                updateStatus('Service Worker active (no cache)', 'success');
+                
+                // Force update on page load
+                registration.addEventListener('updatefound', () => {
+                    const newWorker = registration.installing;
+                    newWorker.addEventListener('statechange', () => {
+                        if (newWorker.state === 'activated') {
+                            console.log('New Service Worker activated');
+                            window.location.reload();
+                        }
+                    });
                 });
+            } catch (error) {
+                console.error('Service Worker registration failed:', error);
+                updateStatus('Service Worker failed', 'error');
+            }
         });
     }
 

@@ -1,98 +1,59 @@
-// Service Worker for uSignal PWA
-const CACHE_NAME = 'usignal-v1';
-const ASSETS_TO_CACHE = [
-    '.',
-    'index.html',
-    'styles.css',
-    'app.js',
-    'manifest.json',
-    'icons/icon-72x72.png',
-    'icons/icon-96x96.png',
-    'icons/icon-128x128.png',
-    'icons/icon-144x144.png',
-    'icons/icon-152x152.png',
-    'icons/icon-192x192.png',
-    'icons/icon-384x384.png',
-    'icons/icon-512x512.png'
-];
+// Service Worker for uSignal PWA - NO CACHING VERSION
+const CACHE_NAME = 'usignal-v2-no-cache';
 
-// Install event - cache assets
+// Install event - skip caching, just activate immediately
 self.addEventListener('install', (event) => {
-    console.log('Service Worker: Installing...');
+    console.log('Service Worker: Installing (no cache)...');
     
     event.waitUntil(
-        caches.open(CACHE_NAME)
-            .then((cache) => {
-                console.log('Service Worker: Caching app shell');
-                return cache.addAll(ASSETS_TO_CACHE);
-            })
-            .then(() => {
-                console.log('Service Worker: Installed successfully');
-                return self.skipWaiting();
-            })
-            .catch((error) => {
-                console.error('Service Worker: Cache failed:', error);
-            })
+        // Clear all existing caches
+        caches.keys().then((cacheNames) => {
+            return Promise.all(
+                cacheNames.map((cacheName) => {
+                    console.log('Service Worker: Deleting cache:', cacheName);
+                    return caches.delete(cacheName);
+                })
+            );
+        })
+        .then(() => {
+            console.log('Service Worker: All caches cleared');
+            return self.skipWaiting();
+        })
     );
 });
 
-// Activate event - clean up old caches
+// Activate event - claim clients immediately and clear all caches
 self.addEventListener('activate', (event) => {
-    console.log('Service Worker: Activating...');
+    console.log('Service Worker: Activating (no cache)...');
     
     event.waitUntil(
         caches.keys()
             .then((cacheNames) => {
                 return Promise.all(
                     cacheNames.map((cacheName) => {
-                        if (cacheName !== CACHE_NAME) {
-                            console.log('Service Worker: Deleting old cache:', cacheName);
-                            return caches.delete(cacheName);
-                        }
+                        console.log('Service Worker: Deleting cache:', cacheName);
+                        return caches.delete(cacheName);
                     })
                 );
             })
             .then(() => {
-                console.log('Service Worker: Activated successfully');
+                console.log('Service Worker: Activated successfully - No caching enabled');
                 return self.clients.claim();
             })
     );
 });
 
-// Fetch event - serve from cache, fallback to network
+// Fetch event - NO CACHING, always fetch from network
 self.addEventListener('fetch', (event) => {
+    console.log('Service Worker: Fetching (no cache):', event.request.url);
+    
+    // Simply pass through to the network, no caching at all
     event.respondWith(
-        caches.match(event.request)
-            .then((response) => {
-                // Cache hit - return response
-                if (response) {
-                    return response;
-                }
-                
-                // Clone the request
-                const fetchRequest = event.request.clone();
-                
-                return fetch(fetchRequest).then((response) => {
-                    // Check if valid response
-                    if (!response || response.status !== 200 || response.type !== 'basic') {
-                        return response;
-                    }
-                    
-                    // Clone the response
-                    const responseToCache = response.clone();
-                    
-                    // Cache the fetched response for future use
-                    caches.open(CACHE_NAME)
-                        .then((cache) => {
-                            cache.put(event.request, responseToCache);
-                        });
-                    
-                    return response;
-                });
-            })
-            .catch(() => {
-                // Return offline page if available
-                return caches.match('/index.html');
+        fetch(event.request)
+            .catch((error) => {
+                console.error('Service Worker: Fetch failed:', error);
+                // Don't serve from cache, just let it fail
+                throw error;
             })
     );
 });
