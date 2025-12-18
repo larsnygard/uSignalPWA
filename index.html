@@ -54,13 +54,18 @@
         <div class="main-container">
             <!-- Sidebar for conversation list -->
             <aside class="sidebar" id="sidebar">
-                <div class="conversation-list" id="conversationList">
-                    <div class="empty-state">
-                        <div class="empty-icon">💬</div>
-                        <h2>Welcome to uSignal</h2>
-                        <p>An unofficial Signal PWA client</p>
-                        <p class="disclaimer">This is a demonstration PWA. To use Signal messaging, please connect to Signal's infrastructure or use the official Signal app.</p>
+                <div class="login-container" id="loginContainer">
+                    <h2>Connect to Signal</h2>
+                    <p>Enter your phone number to begin.</p>
+                    <form id="loginForm">
+                        <input type="tel" id="phoneNumber" placeholder="Phone number with country code" required>
+                        <button type="submit">Connect</button>
+                    </form>
+                    <div id="qrCodeContainer" style="display: none;">
+                        <p>Scan this QR code with your Signal app to link uSignal.</p>
+                        <div id="qrCode"></div>
                     </div>
+                    <p class="disclaimer">This is a demonstration PWA. Use the official Signal app for a secure messaging experience.</p>
                 </div>
             </aside>
 
@@ -97,6 +102,8 @@
     </div>
 
     <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/libsignal-protocol@0.0.23/dist/libsignal-protocol.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     <script src="app.js"></script>
 </body>
 </html>

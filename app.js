@@ -98,6 +98,85 @@ moreButton.addEventListener('click', () => {
     // In a real app, this would open an options menu
 });
 
+// Signal Login
+const loginContainer = document.getElementById('loginContainer');
+const loginForm = document.getElementById('loginForm');
+const phoneNumberInput = document.getElementById('phoneNumber');
+const qrCodeContainer = document.getElementById('qrCodeContainer');
+const qrCodeDiv = document.getElementById('qrCode');
+
+if (loginForm) {
+    loginForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const phoneNumber = phoneNumberInput.value;
+
+        if (!phoneNumber) {
+            updateStatus('Please enter a phone number', 'error');
+            return;
+        }
+
+        try {
+            updateStatus('Generating keys...', 'info');
+            const { libsignal } = window;
+            if (!libsignal) {
+                throw new Error('Signal protocol library not loaded.');
+            }
+
+            // Generate a new identity key pair for the new device
+            const identityKeyPair = await libsignal.KeyHelper.generateIdentityKeyPair();
+            const publicKey = identityKeyPair.pubKey;
+
+            // The linking URI needs the public key in Base64
+            const publicKeyB64 = btoa(String.fromCharCode.apply(null, new Uint8Array(publicKey)));
+            
+            // A real UUID should be generated
+            const uuid = self.crypto.randomUUID();
+
+            const linkingUri = `sgnl://linkdevice?uuid=${uuid}&pub_key=${encodeURIComponent(publicKeyB64)}`;
+
+            loginContainer.querySelector('h2').textContent = 'Link Your Device';
+            loginContainer.querySelector('p').textContent = 'Scan the QR code with Signal on your phone.';
+            loginForm.style.display = 'none';
+            qrCodeContainer.style.display = 'block';
+
+            // Clear any previous QR code
+            qrCodeDiv.innerHTML = '';
+
+            new QRCode(qrCodeDiv, {
+                text: linkingUri,
+                width: 256,
+                height: 256,
+                colorDark: "#000000",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+
+            updateStatus('QR code generated for linking', 'success');
+
+            // After scanning, a real app would listen for a confirmation
+            // from the server via WebSocket or polling.
+            setTimeout(() => {
+                // Simulate successful linking
+                qrCodeContainer.style.display = 'none';
+                const conversationList = document.createElement('div');
+                conversationList.className = 'conversation-list';
+                conversationList.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">✅</div>
+                        <h2>Device Linked!</h2>
+                        <p>Your conversations will appear here.</p>
+                    </div>
+                `;
+                loginContainer.replaceWith(conversationList);
+                updateStatus('Device linked successfully!', 'success');
+            }, 15000); // Simulate a 15-second delay for scanning
+        } catch (error) {
+            console.error('Failed to generate QR code:', error);
+            updateStatus('Failed to generate QR code. See console.', 'error');
+        }
+    });
+}
+
 // Status update helper
 function updateStatus(message, type = 'info') {
     statusText.textContent = message;
